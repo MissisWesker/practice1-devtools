@@ -1,7 +1,15 @@
 #include "matrix.hpp"
 #include "filters.hpp"
 
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
+using namespace cv;
 using namespace std;
+
+void cvMat2matrix(const Mat &src, Matrix &dst);
+void matrix2cvMat(const Matrix &src, Mat &dst);
 
 int main()
 {
@@ -21,6 +29,23 @@ int main()
     cout << mf;
 
     cout << "---------------------------" << endl;
+
+
+	const std::string input = "./testdata/image.png";
+    const std::string output = "./testdata/image_box_color.png";
+
+	Mat srcMat, dstMat;
+
+	srcMat = imread(input, CV_LOAD_IMAGE_COLOR);
+
+	boxFilter(srcMat, dstMat, -1, Size2i(3,3));
+	imwrite("./testdata/image_box_color.png", dstMat);
+	
+	boxFilter(srcMat, dstMat, -1, Size2i(5,5));
+	imwrite("./testdata/image_box_color_5.png", dstMat);
+
+	boxFilter(srcMat, dstMat, -1, Size2i(3,3), cv::Point(-1,-1), false, 4);
+	imwrite("./testdata/image_box_color_no_norm.png", dstMat);
 
     return 0;
 }
